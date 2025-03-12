@@ -24,6 +24,18 @@ app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
+app.get("/api/whoami", (req, res) => {
+  const ip = req.ip || req.headers['x-forwarded-for'] || 'IP not available';
+  const language = req.headers['accept-language'] || 'Language not available';
+  const userAgent = req.headers['user-agent'] || 'User-Agent not available';
+
+  res.json({
+    ipaddress: ip,
+    language: language.split(',')[0], // Getting the first language in the list
+    software: userAgent.split(')')[0].split('(')[1] || 'Software not available',
+  });
+});
+
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
